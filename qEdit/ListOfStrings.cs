@@ -7,13 +7,13 @@ using System.Text;
 
 class ListOfStrings
 {
-    ListOfStrings saveData;
+    List<string> saveData;
     int amount;
     string currentString;
 
     public ListOfStrings()
     {
-         saveData = new ListOfStrings();
+        saveData = new List<string>();
     }
 
     public string GetcurrentString()
@@ -31,4 +31,3 @@ class ListOfStrings
         saveData.Add(s);
     }
 }
-

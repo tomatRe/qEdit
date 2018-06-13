@@ -10,9 +10,12 @@ class QEdit
 
     public static void inputText(int length)
     {
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.BackgroundColor = ConsoleColor.DarkBlue;
         Console.Clear();
+
         ConsoleKeyInfo key;
-        List<string> data = new List<string>();
+        ListOfStrings data = new ListOfStrings();
 
         char lastCharacter = (char)0;
         string fileName;
@@ -21,12 +24,6 @@ class QEdit
 
         do
         {
-            //The contrast between the text and background are too bad
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.BackgroundColor = ConsoleColor.DarkBlue;
-
-            //when i make the design i´ll make sure to 
-            //flood the window with the respective colors
 
             key = Console.ReadKey(true);
 
@@ -76,11 +73,9 @@ class QEdit
         data.Add(line);
     }
 
-    
+
     public static void Main(string[] args)
     {
-
-        ListOfStrings data = new ListOfStrings();
 
         string fileName;
         if (args.Length > 0)
@@ -90,4 +85,3 @@ class QEdit
     }
 
 }
-
