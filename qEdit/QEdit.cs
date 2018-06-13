@@ -8,28 +8,48 @@ using System.Collections.Generic;
 class QEdit
 {
 
+    static string fileName;
+    static int column = 1;
+    static int row = 0;
+
     public static void inputText(int length)
     {
-        Console.ForegroundColor = ConsoleColor.Cyan;
-        Console.BackgroundColor = ConsoleColor.DarkBlue;
-        Console.Clear();
-
         ConsoleKeyInfo key;
         ListOfStrings data = new ListOfStrings();
 
         char lastCharacter = (char)0;
-        string fileName;
         bool exit = false;
         string line = "";
 
         do
         {
+            Console.SetCursorPosition(0, 0);
+
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.BackgroundColor = ConsoleColor.Gray;
+
+            string infoText = "Column " + column + "  Row " + row;
+
+            Console.Write(infoText);
+
+            for (int i = 0; i < Console.WindowWidth-infoText.Length; i++)
+            {
+                Console.Write(" ");
+            }
+
+            Console.SetCursorPosition(row, column);
+
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.BackgroundColor = ConsoleColor.DarkBlue;
 
             key = Console.ReadKey(true);
 
             switch (key.Key)
             {
                 case ConsoleKey.UpArrow:
+                    break;
+
+                case ConsoleKey.Backspace:
                     break;
 
                 case ConsoleKey.DownArrow:
@@ -45,42 +65,50 @@ class QEdit
                     break;
 
                 case ConsoleKey.F10:
-                    Console.Write("Name of the saved file? ");
-                    fileName = Console.ReadLine();
-                    ListOfStrings save = new ListOfStrings();
+                    if (fileName == null)
+                    {
+                        Console.Write("Name of the saved file? ");
+                        fileName = Console.ReadLine();
+                    }
+
+                    //TODO save to a file
 
                     exit = true;
                     break;
 
                 case ConsoleKey.Enter:
-                    length = 80;
+                    row = 0;
+                    column++;
                     Console.WriteLine();
                     break;
 
                 default:
-                    if (length >= 0)
+                    if (row < length)
                     {
                         lastCharacter = key.KeyChar;
-                        length--;
+                        row++;
                         Console.Write(lastCharacter);
                         line += lastCharacter;
                     }
                     break;
             }
+            data.Add(line);
 
         } while (!exit);
-
-        data.Add(line);
+        
     }
 
 
     public static void Main(string[] args)
     {
 
-        string fileName;
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.BackgroundColor = ConsoleColor.DarkBlue;
+        Console.Clear();
+
         if (args.Length > 0)
             fileName = args[0];
-
+            
         inputText(80);
     }
 

@@ -16,9 +16,9 @@ class ListOfStrings
         saveData = new List<string>();
     }
 
-    public string GetcurrentString()
+    public string Get()
     {
-        return currentString;
+        return "";
     }
 
     public int GetAmount()
