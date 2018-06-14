@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 class QEdit
 {
-
+    static string oldFileName;
     static string fileName;
     static int column = 1;
     static int row = 0;
@@ -16,7 +16,7 @@ class QEdit
     {
         ConsoleKeyInfo key;
         ListOfStrings data = new ListOfStrings();
-        //data.LoadPreviousData(fileName);
+        data.LoadPreviousData(fileName);
 
         int totalColumns = column;
         int totalRows = row;
@@ -129,14 +129,14 @@ class QEdit
                     break;
 
                 case ConsoleKey.F10:
-                    if (fileName == null)
+                    if (oldFileName == null)
                     {
                         data.Add(line);
                         Console.SetCursorPosition(0, Console.WindowHeight - 2);
                         Console.Write("Name of the saved file? ");
                         fileName = Console.ReadLine();
 
-                        data.SaveData(fileName);
+                        data.SaveData(fileName, oldFileName);
                     }
 
                     exit = true;
@@ -184,7 +184,7 @@ class QEdit
         Console.Clear();
 
         if (args.Length > 0)
-            fileName = args[0];
+            oldFileName = args[0];
             
         inputText(80);
 

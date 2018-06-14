@@ -60,9 +60,12 @@ class ListOfStrings
                 {
                     line = myFile.ReadLine();
                     saveData.Add(line);
+                    Console.WriteLine(line);
                     amount++;
                 } while (line != null);
                 myFile.Close();
+
+                Console.SetCursorPosition(0,saveData.Count);
             }
             catch (PathTooLongException)
             {
@@ -83,16 +86,20 @@ class ListOfStrings
         }
     }
 
-    public void SaveData(string fileName)
+    public void SaveData(string fileName, string oldFileName)
     {
         try
         {
-            StreamWriter myFile = File.AppendText(fileName);
-            for (int i = 0; i < Ammount; i++)
+            if (oldFileName == null)
             {
-                myFile.WriteLine(saveData[i]);
+                CreateFile(fileName);
             }
-            myFile.Close();
+            else if(oldFileName != fileName)
+            {
+                CreateFile(fileName);
+            }
+            else
+                AppendFile(fileName);
         }
         catch (PathTooLongException)
         {
@@ -110,5 +117,25 @@ class ListOfStrings
         {
             Console.WriteLine("Oooops... " + e.Message);
         }
+    }
+
+    private void CreateFile(string fileName)
+    {
+        StreamWriter myFile = File.CreateText(fileName);
+        for (int i = 0; i < Ammount; i++)
+        {
+            myFile.WriteLine(saveData[i]);
+        }
+        myFile.Close();
+    }
+
+    private void AppendFile(string fileName)
+    {
+        StreamWriter myFile = File.AppendText(fileName);
+        for (int i = 0; i < Ammount; i++)
+        {
+            myFile.WriteLine(saveData[i]);
+        }
+        myFile.Close();
     }
 }
