@@ -16,14 +16,15 @@ class ListOfStrings
         saveData = new List<string>();
     }
 
-    public string Get()
+    public string Get(int n)
     {
-        return "";
+        return saveData[n];
     }
 
-    public int GetAmount()
+    public int Ammount
     {
-        return amount;
+        get { return amount; }
+        set { Ammount = value; }
     }
 
     public void Add(string s)
