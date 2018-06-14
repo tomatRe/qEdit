@@ -16,8 +16,7 @@ class QEdit
     {
         ConsoleKeyInfo key;
         ListOfStrings data = new ListOfStrings();
-
-        //Total colums are the written ones, and the colum are the position
+        //data.LoadPreviousData(fileName);
 
         int totalColumns = column;
         int totalRows = row;
@@ -25,6 +24,8 @@ class QEdit
         char lastCharacter = (char)0;
         bool exit = false;
         string line = "";
+
+        
 
         do
         {
@@ -52,9 +53,49 @@ class QEdit
             switch (key.Key)
             {
                 case ConsoleKey.UpArrow:
+                    if (column > 1)
+                    {
+                        if(line != "")
+                        {
+                            data.ReplaceLine(line, column - 1);
+                            if (data.Get(column - 1).Length > data.Get(column - 2).Length && data.Get(column - 2).Length > 0)
+                            {
+                                row = data.Get(column - 2).Length;
+                            }
+
+                            line = data.Get(column - 2);
+                            
+                        }
+                        else
+                        {
+                            line = data.Get(column - 2);
+                        }
+                        System.Diagnostics.Debug.WriteLine(line);
+                        column--;
+                    }
                     break;
 
                 case ConsoleKey.DownArrow:
+                    if (column < totalColumns-1)
+                    {
+                        if (line != "")
+                        {
+                            data.ReplaceLine(line, column-1);
+
+                            if (data.Get(column - 1).Length > data.Get(column).Length)
+                            {
+                                row = data.Get(column).Length;
+                            }
+                            line = data.Get(column);
+                            
+                        }
+                        else
+                        {
+                            line = data.Get(column);
+                        }
+                        System.Diagnostics.Debug.WriteLine(line);
+                        column++;
+                    }
                     break;
 
                 case ConsoleKey.LeftArrow:
@@ -63,8 +104,16 @@ class QEdit
                     break;
 
                 case ConsoleKey.RightArrow:
-                    if (row < line.Length)
+                    if (row >= 0 && row < line.Length)
                         row++;
+                    break;
+
+                case ConsoleKey.Home:
+                    row = 0;
+                    break;
+
+                case ConsoleKey.End:
+                    row = line.Length;
                     break;
 
                 case ConsoleKey.Backspace:
@@ -82,12 +131,13 @@ class QEdit
                 case ConsoleKey.F10:
                     if (fileName == null)
                     {
+                        data.Add(line);
                         Console.SetCursorPosition(0, Console.WindowHeight - 2);
                         Console.Write("Name of the saved file? ");
                         fileName = Console.ReadLine();
-                    }
 
-                    //TODO save to a file
+                        data.SaveData(fileName);
+                    }
 
                     exit = true;
                     break;
@@ -96,6 +146,7 @@ class QEdit
                     row = 0;
                     totalColumns++;
                     column++;
+                    data.Add(line);
                     line = "";
                     Console.WriteLine();
                     break;
@@ -105,22 +156,20 @@ class QEdit
                     {
                         lastCharacter = key.KeyChar;
                         row++;
-                        line = line.Insert(row-1, lastCharacter.ToString());
+                        line = line.Insert(row - 1, lastCharacter.ToString());
+                        
+                        //Deleting the previous characters of the modified line
+
+                        Console.SetCursorPosition(0, column);
+                        Console.Write(line);
+                        for (int i = 0; i < Console.WindowWidth - line.Length; i++)
+                        {
+                            Console.Write(" ");
+                        }
+                        Console.SetCursorPosition(row, column);
                     }
                     break;
             }
-
-            //Deleting the previous characters of the modified line
-
-            Console.SetCursorPosition(0, column);
-            Console.Write(line);
-            for (int i = 0; i < Console.WindowWidth - line.Length; i++)
-            {
-                Console.Write(" ");
-            }
-            Console.SetCursorPosition(row, column);
-
-            data.Add(line);
 
         } while (!exit);
         
