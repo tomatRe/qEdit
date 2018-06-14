@@ -16,7 +16,8 @@ class QEdit
     {
         ConsoleKeyInfo key;
         ListOfStrings data = new ListOfStrings();
-        data.LoadPreviousData(fileName);
+        data.LoadPreviousData(oldFileName);
+        column = data.Ammount;
 
         int totalColumns = column;
         int totalRows = row;

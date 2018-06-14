@@ -31,7 +31,7 @@ class ListOfStrings
     public void Add(string s)
     {
         saveData.Add(s);
-        amount++;
+        amount = saveData.Count;
     }
 
     public void ReplaceLine(string line, int pos)
@@ -64,8 +64,6 @@ class ListOfStrings
                     amount++;
                 } while (line != null);
                 myFile.Close();
-
-                Console.SetCursorPosition(0,saveData.Count);
             }
             catch (PathTooLongException)
             {
