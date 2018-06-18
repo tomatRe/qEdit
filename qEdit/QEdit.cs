@@ -9,112 +9,182 @@ class QEdit
 {
     static string oldFileName;
     static string fileName;
-    static int column = 1;
-    static int row = 0;
+    static int row = 1;
+    static int column = 0;
+
+    static string line = "";
+    static ListOfStrings data;
+
+    static int totalColumns = column;
+    static int totalRows = row;
+
+    /**
+     * Renders the top bar with info abot the row and column 
+     * where the cursor is at
+     */
+    private static void renderTopBar()
+    {
+        Console.SetCursorPosition(0, 0);
+
+        Console.ForegroundColor = ConsoleColor.Black;
+        Console.BackgroundColor = ConsoleColor.Gray;
+
+        string infoText = "Row " + row + "  Column " + column;
+
+        Console.Write(infoText);
+
+        for (int i = 0; i < Console.WindowWidth - infoText.Length; i++)
+        {
+            Console.Write(" ");
+        }
+
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.BackgroundColor = ConsoleColor.DarkBlue;
+
+        Console.SetCursorPosition(column, row);
+    }
+
+    /**
+     * Called whenever the Up Arrow key is pressed.
+     * 
+     * Moves the cursor up a row if possible.
+     */
+    private static void UpArrowPressed()
+    {
+        if (row > 1)
+        {
+            if (line != "")
+            {
+                data.ReplaceLine(line, row - 1);
+                if (data.Get(row - 1).Length > data.Get(row - 2).Length && data.Get(row - 2).Length > 0)
+                {
+                    column = data.Get(row - 2).Length;
+                }
+
+                line = data.Get(row - 2);
+
+            }
+            else
+            {
+                line = data.Get(row - 2);
+            }
+            System.Diagnostics.Debug.WriteLine(line);
+            row--;
+        }
+    } 
+    
+    /**
+     * Called whenever the Down Arrow key is pressed.
+     * 
+     * Moves the cursor down a row if possible.
+     */
+    private static void DownArrowPressed()
+    {
+        if (row < totalColumns - 1)
+        {
+            if (line != "")
+            {
+                data.ReplaceLine(line, row - 1);
+
+                if (data.Get(row - 1).Length > data.Get(row).Length)
+                {
+                    column = data.Get(row).Length;
+                }
+                line = data.Get(row);
+
+            }
+            else
+            {
+                line = data.Get(row);
+            }
+            System.Diagnostics.Debug.WriteLine(line);
+            row++;
+        }
+    }
+    
+    /**
+     * Called whenever the Enter key is pressed.
+     * 
+     * Moves the cursor down a row and adds a new line.
+     */
+    private static void EnterKeyPressed()
+    {
+        column = 0;
+        totalColumns++;
+        row++;
+        data.Add(line);
+        line = "";
+        Console.WriteLine();
+    } 
+    
+    /**
+     * Called whenever the Right arrow key is pressed.
+     * 
+     * Moves the cursor to the right one possition if possible
+     */
+    private static void RightArrowPressed()
+    {
+        if (column >= 0 && column < line.Length)
+            column++;
+    }
+    
+    /**
+     * Called whenever the Left arrow key is pressed.
+     * 
+     * Moves the cursor to the left one possition if possible
+     */
+    private static void LeftArrowPressed()
+    {
+        if (column > 0)
+            column--;
+    }
+
+
+
 
     public static void inputText(int length)
     {
         ConsoleKeyInfo key;
         ListOfStrings data = new ListOfStrings();
         data.LoadPreviousData(oldFileName);
-        column = data.Ammount;
 
-        int totalColumns = column;
-        int totalRows = row;
+        if(data.Ammount != 0)
+            row = data.Ammount;
+
 
         char lastCharacter = (char)0;
         bool exit = false;
-        string line = "";
-
-        
 
         do
         {
-            Console.SetCursorPosition(0, 0);
-
-            Console.ForegroundColor = ConsoleColor.Black;
-            Console.BackgroundColor = ConsoleColor.Gray;
-
-            string infoText = "Column " + column + "  Row " + row;
-
-            Console.Write(infoText);
-
-            for (int i = 0; i < Console.WindowWidth-infoText.Length; i++)
-            {
-                Console.Write(" ");
-            }
-
-            Console.SetCursorPosition(row, column);
-
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.BackgroundColor = ConsoleColor.DarkBlue;
+            renderTopBar();
 
             key = Console.ReadKey(true);
 
             switch (key.Key)
             {
                 case ConsoleKey.UpArrow:
-                    if (column > 1)
-                    {
-                        if(line != "")
-                        {
-                            data.ReplaceLine(line, column - 1);
-                            if (data.Get(column - 1).Length > data.Get(column - 2).Length && data.Get(column - 2).Length > 0)
-                            {
-                                row = data.Get(column - 2).Length;
-                            }
-
-                            line = data.Get(column - 2);
-                            
-                        }
-                        else
-                        {
-                            line = data.Get(column - 2);
-                        }
-                        System.Diagnostics.Debug.WriteLine(line);
-                        column--;
-                    }
+                    UpArrowPressed();
                     break;
 
                 case ConsoleKey.DownArrow:
-                    if (column < totalColumns-1)
-                    {
-                        if (line != "")
-                        {
-                            data.ReplaceLine(line, column-1);
-
-                            if (data.Get(column - 1).Length > data.Get(column).Length)
-                            {
-                                row = data.Get(column).Length;
-                            }
-                            line = data.Get(column);
-                            
-                        }
-                        else
-                        {
-                            line = data.Get(column);
-                        }
-                        System.Diagnostics.Debug.WriteLine(line);
-                        column++;
-                    }
+                    DownArrowPressed();
                     break;
 
                 case ConsoleKey.LeftArrow:
-                    if (row > 0)
-                        row--;
+                    LeftArrowPressed();
                     break;
 
                 case ConsoleKey.RightArrow:
-                    if (row >= 0 && row < line.Length)
-                        row++;
+                    RightArrowPressed();
                     break;
 
                 case ConsoleKey.Home:
-                    row = 0;
+                    column = 0;
                     break;
 
                 case ConsoleKey.End:
-                    row = line.Length;
+                    column = line.Length;
                     break;
 
                 case ConsoleKey.Backspace:
@@ -144,30 +214,25 @@ class QEdit
                     break;
 
                 case ConsoleKey.Enter:
-                    row = 0;
-                    totalColumns++;
-                    column++;
-                    data.Add(line);
-                    line = "";
-                    Console.WriteLine();
+                    EnterKeyPressed();
                     break;
 
                 default:
-                    if (row < length)
+                    if (column < length && line.Length < 80)
                     {
                         lastCharacter = key.KeyChar;
-                        row++;
-                        line = line.Insert(row - 1, lastCharacter.ToString());
+                        column++;
+                        line = line.Insert(column - 1, lastCharacter.ToString());
                         
                         //Deleting the previous characters of the modified line
 
-                        Console.SetCursorPosition(0, column);
+                        Console.SetCursorPosition(0, row);
                         Console.Write(line);
                         for (int i = 0; i < Console.WindowWidth - line.Length; i++)
                         {
                             Console.Write(" ");
                         }
-                        Console.SetCursorPosition(row, column);
+                        Console.SetCursorPosition(column, row);
                     }
                     break;
             }
@@ -179,7 +244,7 @@ class QEdit
 
     public static void Main(string[] args)
     {
-
+        data = new ListOfStrings();
         Console.ForegroundColor = ConsoleColor.Cyan;
         Console.BackgroundColor = ConsoleColor.DarkBlue;
         Console.Clear();
