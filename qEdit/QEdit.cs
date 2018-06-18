@@ -80,7 +80,8 @@ class QEdit
      */
     private static void DownArrowPressed()
     {
-        if (row < totalColumns - 1)
+        System.Diagnostics.Debug.WriteLine("DOWN: row = " + row + "; totalRows = " + totalRows);
+        if (row < totalRows - 1)
         {
             if (line != "")
             {
@@ -110,7 +111,7 @@ class QEdit
     private static void EnterKeyPressed()
     {
         column = 0;
-        totalColumns++;
+        totalRows++;
         row++;
         data.Add(line);
         line = "";
@@ -139,9 +140,6 @@ class QEdit
             column--;
     }
 
-
-
-
     public static void inputText(int length)
     {
         ConsoleKeyInfo key;
@@ -150,7 +148,6 @@ class QEdit
 
         if(data.Ammount != 0)
             row = data.Ammount;
-
 
         char lastCharacter = (char)0;
         bool exit = false;
@@ -218,7 +215,7 @@ class QEdit
                     break;
 
                 default:
-                    if (column < length && line.Length < 80)
+                    if (column < length && line.Length < length)
                     {
                         lastCharacter = key.KeyChar;
                         column++;
@@ -252,7 +249,7 @@ class QEdit
         if (args.Length > 0)
             oldFileName = args[0];
             
-        inputText(80);
+        inputText(1024);
 
         Console.SetCursorPosition(0, Console.WindowHeight - 1);
     }
