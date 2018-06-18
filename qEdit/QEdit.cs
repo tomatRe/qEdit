@@ -41,7 +41,7 @@ class QEdit
         Console.ForegroundColor = ConsoleColor.Cyan;
         Console.BackgroundColor = ConsoleColor.DarkBlue;
 
-        Console.SetCursorPosition(column, row);
+        //Console.SetCursorPosition(column, row);
     }
 
     /**
@@ -154,7 +154,8 @@ class QEdit
 
         do
         {
-            renderTopBar();
+            RenderText(data);
+            //renderTopBar();
 
             key = Console.ReadKey(true);
 
@@ -215,29 +216,54 @@ class QEdit
                     break;
 
                 default:
+                    
                     if (column < length && line.Length < length)
                     {
                         lastCharacter = key.KeyChar;
                         column++;
                         line = line.Insert(column - 1, lastCharacter.ToString());
-                        
-                        //Deleting the previous characters of the modified line
+                        // Cursor at the beggining so line gets
+                        // rendered from the starting of the screen
+                        //Console.SetCursorPosition(0, row);
+                        //Console.Write(line);
 
-                        Console.SetCursorPosition(0, row);
-                        Console.Write(line);
-                        for (int i = 0; i < Console.WindowWidth - line.Length; i++)
+                        /*for (int i = 0; i < Console.WindowWidth - line.Length; i++)
                         {
                             Console.Write(" ");
-                        }
-                        Console.SetCursorPosition(column, row);
+                        }*/
+                        // Console.SetCursorPosition(column, row);
+                        data.ReplaceLine(line, row);
                     }
+                    
                     break;
             }
-
         } while (!exit);
-        
     }
 
+    private static void ScrollScreen(int step)
+    {
+
+    }
+
+    private static void RenderText(ListOfStrings data)
+    {
+        Console.Clear();
+        renderTopBar();
+
+        for (int i = 0; i < data.saveData.Count; i++)
+        {
+            string currentLine = data.saveData[i];
+
+            if (i == 0)
+                Console.SetCursorPosition(0, 1);
+            else
+                 Console.SetCursorPosition(0, i);
+
+            Console.Write(currentLine);
+        }
+
+        Console.SetCursorPosition(column, row);
+    }
 
     public static void Main(string[] args)
     {

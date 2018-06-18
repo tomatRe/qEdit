@@ -7,7 +7,7 @@ using System.IO;
 
 class ListOfStrings
 {
-    List<string> saveData;
+    public List<string> saveData;
     int amount;
     string currentString;
 
@@ -46,6 +46,7 @@ class ListOfStrings
         }
             
     }
+
 
     public void LoadPreviousData(string fileName)
     {
