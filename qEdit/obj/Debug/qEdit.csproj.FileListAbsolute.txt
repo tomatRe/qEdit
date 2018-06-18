@@ -1,0 +1,7 @@
+C:\Users\toni\source\repos\qEdit\qEdit\bin\Debug\qEdit.exe.config
+C:\Users\toni\source\repos\qEdit\qEdit\bin\Debug\qEdit.exe
+C:\Users\toni\source\repos\qEdit\qEdit\bin\Debug\qEdit.pdb
+C:\Users\toni\source\repos\qEdit\qEdit\obj\Debug\qEdit.csprojAssemblyReference.cache
+C:\Users\toni\source\repos\qEdit\qEdit\obj\Debug\qEdit.csproj.CoreCompileInputs.cache
+C:\Users\toni\source\repos\qEdit\qEdit\obj\Debug\qEdit.exe
+C:\Users\toni\source\repos\qEdit\qEdit\obj\Debug\qEdit.pdb
