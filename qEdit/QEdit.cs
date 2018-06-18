@@ -240,29 +240,74 @@ class QEdit
         } while (!exit);
     }
 
-    private static void ScrollScreen(int step)
+    private static List<string> ScrollScreen(int offset, List<string> stringList)
     {
+        List<string> retList = new List<string>(stringList.Count);
+        for(int i = 0; i< stringList.Count; i++)
+        {
+            string currentLine = stringList[i];
+            if(currentLine.Length < offset)
+            {
+                retList.Add("");
+            }
+            else
+            {
+                retList.Add(currentLine.Substring(offset, (currentLine.Length - offset)));
+            }
+        }
+        return retList;
+    }
 
+    private static int IsScrollNeeded(List<string> stringList)
+    {
+        foreach (string str in stringList)
+        {
+            if(str.Length > 80)
+            {
+                return str.Length - 80;
+            }
+        }
+        return 0;
     }
 
     private static void RenderText(ListOfStrings data)
     {
+        List<string> renderThis = new List<string>(data.saveData.Count);
         Console.Clear();
         renderTopBar();
 
-        for (int i = 0; i < data.saveData.Count; i++)
+        int scroll = IsScrollNeeded(data.saveData);
+
+        if (scroll != 0)
         {
-            string currentLine = data.saveData[i];
+            renderThis = ScrollScreen(scroll, data.saveData);
+        }
+        else
+        {
+            renderThis = data.saveData;
+        }
+
+        for (int i = 0; i < renderThis.Count; i++)
+        {
+            string currentLine = renderThis[i];
 
             if (i == 0)
                 Console.SetCursorPosition(0, 1);
             else
-                 Console.SetCursorPosition(0, i);
+                Console.SetCursorPosition(0, i + 1);
 
             Console.Write(currentLine);
-        }
 
-        Console.SetCursorPosition(column, row);
+        }
+        if(scroll != 0)
+        {
+            Console.SetCursorPosition(80, row);
+        }
+        else
+        {
+            Console.SetCursorPosition(column, row);
+        }
+        
     }
 
     public static void Main(string[] args)

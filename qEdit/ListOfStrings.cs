@@ -36,9 +36,9 @@ class ListOfStrings
 
     public void ReplaceLine(string line, int pos)
     {
-        if(pos >= 0 && pos < saveData.Count)
+        if(pos >= 0 && pos <= saveData.Count)
         {
-            saveData[pos] = line;
+            saveData[pos - 1] = line;
         }
         else
         {
